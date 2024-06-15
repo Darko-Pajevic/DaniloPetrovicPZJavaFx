@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelreservationsystem.controllers.ManageHotelsController" alignment="CENTER" spacing="10">
+    <TextField fx:id="nameField" promptText="Hotel Name"/>
+    <TextField fx:id="addressField" promptText="Address"/>
+    <TextField fx:id="ratingField" promptText="Rating"/>
+    <Button text="Add Hotel" onAction="#handleAddHotel"/>
+    <TableView fx:id="hotelsTable">
+        <columns>
+            <TableColumn text="ID" fx:id="idColumn"/>
+            <TableColumn text="Name" fx:id="nameColumn"/>
+            <TableColumn text="Address" fx:id="addressColumn"/>
+            <TableColumn text="Rating" fx:id="ratingColumn"/>
+        </columns>
+    </TableView>
+    <Button text="Back" onAction="#handleBack"/>
+</VBox>
