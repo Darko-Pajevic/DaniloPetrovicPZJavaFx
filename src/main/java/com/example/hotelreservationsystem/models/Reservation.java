@@ -51,12 +51,30 @@ public class Reservation {
     }
 
     /**
+     * Postavlja ID korisnika.
+     *
+     * @param userId ID korisnika
+     */
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    /**
      * Vraća ID sobe.
      *
      * @return ID sobe
      */
     public int getRoomId() {
         return roomId;
+    }
+
+    /**
+     * Postavlja ID sobe.
+     *
+     * @param roomId ID sobe
+     */
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
     /**
@@ -69,6 +87,15 @@ public class Reservation {
     }
 
     /**
+     * Postavlja datum početka rezervacije.
+     *
+     * @param startDate datum početka rezervacije
+     */
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
      * Vraća datum završetka rezervacije.
      *
      * @return datum završetka rezervacije
@@ -78,12 +105,30 @@ public class Reservation {
     }
 
     /**
+     * Postavlja datum završetka rezervacije.
+     *
+     * @param endDate datum završetka rezervacije
+     */
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+    /**
      * Vraća ukupnu cenu rezervacije.
      *
      * @return ukupna cena rezervacije
      */
     public double getTotalPrice() {
         return totalPrice;
+    }
+
+    /**
+     * Postavlja ukupnu cenu rezervacije.
+     *
+     * @param totalPrice ukupna cena rezervacije
+     */
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     @Override

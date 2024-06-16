@@ -1,6 +1,7 @@
 package com.example.hotelreservationsystem.dao;
 
 import com.example.hotelreservationsystem.models.Employee;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +49,40 @@ public class EmployeeDAO {
         }
     }
 
-    // Implementirajte update i delete metode
+    /**
+     * Ažurira postojeće informacije o zaposlenom u bazi podataka.
+     *
+     * @param employee objekat zaposlenog sa ažuriranim informacijama
+     * @return true ako je zaposleni uspešno ažuriran, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean updateEmployee(Employee employee) throws SQLException {
+        String query = "UPDATE Employees SET name = ?, position = ?, salary = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, employee.getName());
+            stmt.setString(2, employee.getPosition());
+            stmt.setDouble(3, employee.getSalary());
+            stmt.setInt(4, employee.getId());
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        }
+    }
+
+    /**
+     * Briše zaposlenog iz baze podataka.
+     *
+     * @param employeeId ID zaposlenog koji se briše
+     * @return true ako je zaposleni uspešno obrisan, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean deleteEmployee(int employeeId) throws SQLException {
+        String query = "DELETE FROM Employees WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, employeeId);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        }
+    }
 }

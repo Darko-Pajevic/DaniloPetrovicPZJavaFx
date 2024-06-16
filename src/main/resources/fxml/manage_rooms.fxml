@@ -11,6 +11,8 @@
     <TextField fx:id="typeField" promptText="Room Type"/>
     <TextField fx:id="priceField" promptText="Price Per Night"/>
     <Button text="Add Room" onAction="#handleAddRoom"/>
+    <Button text="Update Room" onAction="#handleUpdateRoom"/>
+    <Button text="Delete Room" onAction="#handleDeleteRoom"/>
     <TableView fx:id="roomsTable">
         <columns>
             <TableColumn text="ID" fx:id="idColumn"/>

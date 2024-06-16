@@ -51,6 +51,43 @@ public class HotelDAO {
     }
 
     /**
+     * Ažurira postojeće informacije o hotelu u bazi podataka.
+     *
+     * @param hotel objekat hotela sa ažuriranim informacijama
+     * @return true ako je hotel uspešno ažuriran, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean updateHotel(Hotel hotel) throws SQLException {
+        String query = "UPDATE Hotels SET name = ?, address = ?, rating = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, hotel.getName());
+            stmt.setString(2, hotel.getAddress());
+            stmt.setFloat(3, hotel.getRating());
+            stmt.setInt(4, hotel.getId());
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        }
+    }
+
+    /**
+     * Briše hotel iz baze podataka.
+     *
+     * @param hotelId ID hotela koji se briše
+     * @return true ako je hotel uspešno obrisan, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean deleteHotel(int hotelId) throws SQLException {
+        String query = "DELETE FROM Hotels WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, hotelId);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        }
+    }
+
+    /**
      * Dohvata vremenske informacije za određenu lokaciju hotela.
      *
      * @param hotelLocation lokacija hotela

@@ -1,6 +1,7 @@
 package com.example.hotelreservationsystem.dao;
 
 import com.example.hotelreservationsystem.models.Room;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,5 +50,41 @@ public class RoomDAO {
         }
     }
 
-    // Implementirajte update i delete metode
+    /**
+     * Ažurira postojeću sobu u bazi podataka.
+     *
+     * @param room objekat sobe sa ažuriranim podacima
+     * @return true ako je soba uspešno ažurirana, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean updateRoom(Room room) throws SQLException {
+        String query = "UPDATE Rooms SET hotel_id = ?, room_number = ?, type = ?, price_per_night = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, room.getHotelId());
+            stmt.setString(2, room.getRoomNumber());
+            stmt.setString(3, room.getType());
+            stmt.setDouble(4, room.getPricePerNight());
+            stmt.setInt(5, room.getId());
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        }
+    }
+
+    /**
+     * Briše sobu iz baze podataka.
+     *
+     * @param roomId ID sobe koja se briše
+     * @return true ako je soba uspešno obrisana, false inače
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public boolean deleteRoom(int roomId) throws SQLException {
+        String query = "DELETE FROM Rooms WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, roomId);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        }
+    }
 }

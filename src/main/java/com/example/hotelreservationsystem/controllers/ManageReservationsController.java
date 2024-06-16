@@ -126,6 +126,74 @@ public class ManageReservationsController {
     }
 
     /**
+     * Rukovanje događajem za ažuriranje rezervacije.
+     */
+    @FXML
+    private void handleUpdateReservation() {
+        Reservation selectedReservation = reservationsTable.getSelectionModel().getSelectedItem();
+        if (selectedReservation == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a reservation to update.");
+            return;
+        }
+
+        Integer userId = userIdComboBox.getValue();
+        Integer roomId = roomIdComboBox.getValue();
+        LocalDate startDate = startDatePicker.getValue();
+        LocalDate endDate = endDatePicker.getValue();
+        double totalPrice;
+
+        if (userId == null || roomId == null || startDate == null || endDate == null) {
+            showAlert(Alert.AlertType.ERROR, "Neispravan unos", "Molimo popunite sva polja.");
+            return;
+        }
+
+        try {
+            totalPrice = Double.parseDouble(totalPriceField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Neispravan unos", "Unesite validnu ukupnu cenu.");
+            return;
+        }
+
+        selectedReservation.setUserId(userId);
+        selectedReservation.setRoomId(roomId);
+        selectedReservation.setStartDate(startDate);
+        selectedReservation.setEndDate(endDate);
+        selectedReservation.setTotalPrice(totalPrice);
+
+        try {
+            reservationDAO.updateReservation(selectedReservation);
+            reservationsTable.refresh();
+            clearFields();
+            showAlert(Alert.AlertType.INFORMATION, "Uspeh", "Rezervacija je uspešno ažurirana.");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Greška pri ažuriranju rezervacije u bazi podataka.", e);
+            showAlert(Alert.AlertType.ERROR, "Greška u bazi podataka", "Greška pri ažuriranju rezervacije u bazi podataka.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za brisanje rezervacije.
+     */
+    @FXML
+    private void handleDeleteReservation() {
+        Reservation selectedReservation = reservationsTable.getSelectionModel().getSelectedItem();
+        if (selectedReservation == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a reservation to delete.");
+            return;
+        }
+
+        try {
+            reservationDAO.deleteReservation(selectedReservation.getId());
+            reservationList.remove(selectedReservation);
+            clearFields();
+            showAlert(Alert.AlertType.INFORMATION, "Uspeh", "Rezervacija je uspešno obrisana.");
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Greška pri brisanju rezervacije iz baze podataka.", e);
+            showAlert(Alert.AlertType.ERROR, "Greška u bazi podataka", "Greška pri brisanju rezervacije iz baze podataka.");
+        }
+    }
+
+    /**
      * Čišćenje polja za unos.
      */
     private void clearFields() {

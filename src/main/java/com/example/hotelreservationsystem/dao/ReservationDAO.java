@@ -64,4 +64,39 @@ public class ReservationDAO {
             statement.executeUpdate();
         }
     }
+
+    /**
+     * Ažurira postojeću rezervaciju u bazi podataka.
+     *
+     * @param reservation objekat rezervacije koji se ažurira
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public void updateReservation(Reservation reservation) throws SQLException {
+        String query = "UPDATE Reservations SET user_id = ?, room_id = ?, start_date = ?, end_date = ?, total_price = ? WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, reservation.getUserId());
+            statement.setInt(2, reservation.getRoomId());
+            statement.setLong(3, reservation.getStartDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            statement.setLong(4, reservation.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
+            statement.setDouble(5, reservation.getTotalPrice());
+            statement.setInt(6, reservation.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    /**
+     * Briše rezervaciju iz baze podataka.
+     *
+     * @param reservationId ID rezervacije koja se briše
+     * @throws SQLException ako dođe do greške prilikom pristupa bazi podataka
+     */
+    public void deleteReservation(int reservationId) throws SQLException {
+        String query = "DELETE FROM Reservations WHERE id = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, reservationId);
+            statement.executeUpdate();
+        }
+    }
 }

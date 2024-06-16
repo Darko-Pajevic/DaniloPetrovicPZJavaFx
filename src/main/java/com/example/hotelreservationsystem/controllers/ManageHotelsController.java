@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -98,6 +97,71 @@ public class ManageHotelsController {
             }
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Error adding hotel to the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za ažuriranje hotela.
+     * Proverava ispravnost unosa i ažurira postojeći hotel u bazi podataka.
+     */
+    @FXML
+    public void handleUpdateHotel() {
+        Hotel selectedHotel = hotelsTable.getSelectionModel().getSelectedItem();
+        if (selectedHotel == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a hotel to update.");
+            return;
+        }
+
+        String name = nameField.getText();
+        String address = addressField.getText();
+        float rating;
+
+        try {
+            rating = Float.parseFloat(ratingField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid rating.");
+            return;
+        }
+
+        selectedHotel.setName(name);
+        selectedHotel.setAddress(address);
+        selectedHotel.setRating(rating);
+
+        try {
+            if (hotelDAO.updateHotel(selectedHotel)) {
+                hotelsTable.refresh();
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Hotel updated successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating hotel in the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating hotel in the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za brisanje hotela.
+     * Briše odabrani hotel iz baze podataka.
+     */
+    @FXML
+    public void handleDeleteHotel() {
+        Hotel selectedHotel = hotelsTable.getSelectionModel().getSelectedItem();
+        if (selectedHotel == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a hotel to delete.");
+            return;
+        }
+
+        try {
+            if (hotelDAO.deleteHotel(selectedHotel.getId())) {
+                hotelList.remove(selectedHotel);
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Hotel deleted successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting hotel from the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting hotel from the database.");
         }
     }
 

@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -27,26 +26,24 @@ import java.sql.SQLException;
 public class ManageEmployeesController {
 
     @FXML
-    private TextField nameField;
+    public TextField nameField;
     @FXML
-    private TextField positionField;
+    public TextField positionField;
     @FXML
-    private TextField salaryField;
+    public TextField salaryField;
     @FXML
     private TableView<Employee> employeesTable;
     @FXML
-    private TableColumn<Employee, Integer> idColumn;
+    public TableColumn<Employee, Integer> idColumn;
     @FXML
-    private TableColumn<Employee, String> nameColumn;
+    public TableColumn<Employee, String> nameColumn;
     @FXML
-    private TableColumn<Employee, String> positionColumn;
+    public TableColumn<Employee, String> positionColumn;
     @FXML
-    private TableColumn<Employee, Double> salaryColumn;
-    @FXML
-    private Button backButton;
+    public TableColumn<Employee, Double> salaryColumn;
 
-    private ObservableList<Employee> employeeList = FXCollections.observableArrayList();
-    private EmployeeDAO employeeDAO = new EmployeeDAO();
+    public ObservableList<Employee> employeeList = FXCollections.observableArrayList();
+    public EmployeeDAO employeeDAO = new EmployeeDAO();
 
     /**
      * Inicijalizacija kontrolera.
@@ -59,11 +56,10 @@ public class ManageEmployeesController {
         positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
         salaryColumn.setCellValueFactory(new PropertyValueFactory<>("salary"));
 
-        // Učitavanje svih zaposlenih iz baze podataka
         try {
             employeeList.addAll(employeeDAO.getAllEmployees());
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Greška u bazi podataka", "Greška pri učitavanju zaposlenih iz baze podataka.");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error loading employees from the database.");
         }
 
         employeesTable.setItems(employeeList);
@@ -74,32 +70,95 @@ public class ManageEmployeesController {
      * Proverava ispravnost unosa i dodaje novog zaposlenog u bazu podataka.
      */
     @FXML
-    private void handleAddEmployee() {
+    public void handleAddEmployee() {
         String name = nameField.getText();
         String position = positionField.getText();
         double salary;
 
-        // Provera ispravnosti unosa plate
         try {
             salary = Double.parseDouble(salaryField.getText());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Neispravan unos", "Unesite validnu platu.");
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid salary.");
             return;
         }
 
         Employee employee = new Employee(0, name, position, salary);
 
-        // Dodavanje zaposlenog u bazu podataka
         try {
             if (employeeDAO.createEmployee(employee)) {
                 employeeList.add(employee);
                 clearFields();
-                showAlert(Alert.AlertType.INFORMATION, "Uspeh", "Zaposleni je uspešno dodat.");
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Employee added successfully.");
             } else {
-                showAlert(Alert.AlertType.ERROR, "Greška u bazi podataka", "Greška pri dodavanju zaposlenog u bazu podataka.");
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error adding employee to the database.");
             }
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Greška u bazi podataka", "Greška pri dodavanju zaposlenog u bazu podataka.");
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error adding employee to the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za ažuriranje zaposlenog.
+     * Proverava ispravnost unosa i ažurira postojećeg zaposlenog u bazi podataka.
+     */
+    @FXML
+    public void handleUpdateEmployee() {
+        Employee selectedEmployee = employeesTable.getSelectionModel().getSelectedItem();
+        if (selectedEmployee == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select an employee to update.");
+            return;
+        }
+
+        String name = nameField.getText();
+        String position = positionField.getText();
+        double salary;
+
+        try {
+            salary = Double.parseDouble(salaryField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter a valid salary.");
+            return;
+        }
+
+        selectedEmployee.setName(name);
+        selectedEmployee.setPosition(position);
+        selectedEmployee.setSalary(salary);
+
+        try {
+            if (employeeDAO.updateEmployee(selectedEmployee)) {
+                employeesTable.refresh();
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Employee updated successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating employee in the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating employee in the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za brisanje zaposlenog.
+     * Briše odabranog zaposlenog iz baze podataka.
+     */
+    @FXML
+    public void handleDeleteEmployee() {
+        Employee selectedEmployee = employeesTable.getSelectionModel().getSelectedItem();
+        if (selectedEmployee == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select an employee to delete.");
+            return;
+        }
+
+        try {
+            if (employeeDAO.deleteEmployee(selectedEmployee.getId())) {
+                employeeList.remove(selectedEmployee);
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Employee deleted successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting employee from the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting employee from the database.");
         }
     }
 

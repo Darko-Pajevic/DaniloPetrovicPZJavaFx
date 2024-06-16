@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -102,6 +101,74 @@ public class ManageRoomsController {
             }
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Database Error", "Error adding room to the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za ažuriranje sobe.
+     * Proverava ispravnost unosa i ažurira postojeću sobu u bazi podataka.
+     */
+    @FXML
+    private void handleUpdateRoom() {
+        Room selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a room to update.");
+            return;
+        }
+
+        int hotelId;
+        String roomNumber = roomNumberField.getText();
+        String type = typeField.getText();
+        double price;
+
+        try {
+            hotelId = Integer.parseInt(hotelIdField.getText());
+            price = Double.parseDouble(priceField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Invalid Input", "Please enter valid numbers for hotel ID and price.");
+            return;
+        }
+
+        selectedRoom.setHotelId(hotelId);
+        selectedRoom.setRoomNumber(roomNumber);
+        selectedRoom.setType(type);
+        selectedRoom.setPricePerNight(price);
+
+        try {
+            if (roomDAO.updateRoom(selectedRoom)) {
+                roomsTable.refresh();
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Room updated successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating room in the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error updating room in the database.");
+        }
+    }
+
+    /**
+     * Rukovanje događajem za brisanje sobe.
+     * Briše odabranu sobu iz baze podataka.
+     */
+    @FXML
+    private void handleDeleteRoom() {
+        Room selectedRoom = roomsTable.getSelectionModel().getSelectedItem();
+        if (selectedRoom == null) {
+            showAlert(Alert.AlertType.ERROR, "No Selection", "Please select a room to delete.");
+            return;
+        }
+
+        try {
+            if (roomDAO.deleteRoom(selectedRoom.getId())) {
+                roomList.remove(selectedRoom);
+                clearFields();
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Room deleted successfully.");
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting room from the database.");
+            }
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Database Error", "Error deleting room from the database.");
         }
     }
 

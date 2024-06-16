@@ -14,6 +14,8 @@
     <DatePicker fx:id="endDatePicker" promptText="End Date"/>
     <TextField fx:id="totalPriceField" promptText="Total Price"/>
     <Button text="Add Reservation" onAction="#handleAddReservation"/>
+    <Button text="Update Reservation" onAction="#handleUpdateReservation"/>
+    <Button text="Delete Reservation" onAction="#handleDeleteReservation"/>
     <TableView fx:id="reservationsTable">
         <columns>
             <TableColumn text="ID" fx:id="idColumn"/>

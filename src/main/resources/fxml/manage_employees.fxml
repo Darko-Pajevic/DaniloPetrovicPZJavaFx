@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,17 +6,19 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hotelreservationsystem.controllers.ManageEmployeesController" alignment="CENTER" spacing="10">
-    <TextField fx:id="nameField" promptText="Ime zaposlenog"/>
-    <TextField fx:id="positionField" promptText="Pozicija"/>
-    <TextField fx:id="salaryField" promptText="Plata"/>
-    <Button text="Dodaj zaposlenog" onAction="#handleAddEmployee"/>
+    <TextField fx:id="nameField" promptText="Name"/>
+    <TextField fx:id="positionField" promptText="Position"/>
+    <TextField fx:id="salaryField" promptText="Salary"/>
+    <Button text="Add Employee" onAction="#handleAddEmployee"/>
+    <Button text="Update Employee" onAction="#handleUpdateEmployee"/>
+    <Button text="Delete Employee" onAction="#handleDeleteEmployee"/>
     <TableView fx:id="employeesTable">
         <columns>
             <TableColumn text="ID" fx:id="idColumn"/>
-            <TableColumn text="Ime" fx:id="nameColumn"/>
-            <TableColumn text="Pozicija" fx:id="positionColumn"/>
-            <TableColumn text="Plata" fx:id="salaryColumn"/>
+            <TableColumn text="Name" fx:id="nameColumn"/>
+            <TableColumn text="Position" fx:id="positionColumn"/>
+            <TableColumn text="Salary" fx:id="salaryColumn"/>
         </columns>
     </TableView>
-    <Button fx:id="backButton" text="Nazad" onAction="#handleBack"/>
+    <Button text="Back" onAction="#handleBack"/>
 </VBox>
