@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -32,7 +33,6 @@ public class ManageHotelsController {
     public TextField addressField;
     @FXML
     public TextField ratingField;
-    public TableView<Object> tableView;
     @FXML
     private TableView<Hotel> hotelsTable;
     @FXML
@@ -43,6 +43,8 @@ public class ManageHotelsController {
     public TableColumn<Hotel, String> addressColumn;
     @FXML
     public TableColumn<Hotel, Float> ratingColumn;
+    @FXML
+    private Label weatherInfoLabel;
 
     public ObservableList<Hotel> hotelList = FXCollections.observableArrayList();
     public HotelDAO hotelDAO = new HotelDAO();
@@ -134,5 +136,15 @@ public class ManageHotelsController {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Prikazivanje vremenskih informacija za odabranu lokaciju hotela.
+     */
+    @FXML
+    private void handleShowWeather() {
+        String selectedHotelLocation = "London"; // Dobijte stvarnu lokaciju od odabranog hotela
+        String weatherInfo = hotelDAO.getWeatherForHotel(selectedHotelLocation);
+        weatherInfoLabel.setText(weatherInfo);
     }
 }

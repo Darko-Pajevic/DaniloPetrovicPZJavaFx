@@ -1,6 +1,8 @@
 package com.example.hotelreservationsystem.dao;
 
 import com.example.hotelreservationsystem.models.Hotel;
+import com.example.hotelreservationsystem.service.WeatherService;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +50,18 @@ public class HotelDAO {
         }
     }
 
-    // Implementirajte update i delete metode
+    /**
+     * Dohvata vremenske informacije za određenu lokaciju hotela.
+     *
+     * @param hotelLocation lokacija hotela
+     * @return vremenske informacije
+     */
+    public String getWeatherForHotel(String hotelLocation) {
+        try {
+            return WeatherService.getWeather(hotelLocation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unable to retrieve weather information.";
+        }
+    }
 }

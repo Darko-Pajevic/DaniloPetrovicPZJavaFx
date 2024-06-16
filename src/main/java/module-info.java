@@ -3,6 +3,8 @@ module com.example.danilopetrovicpz {
     requires javafx.fxml;
     requires java.sql;
     requires org.xerial.sqlitejdbc;
+    requires org.json;
+    requires java.desktop;
 
     opens com.example.hotelreservationsystem to javafx.fxml;
     opens com.example.hotelreservationsystem.models to javafx.base;
