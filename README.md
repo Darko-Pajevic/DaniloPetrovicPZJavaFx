@@ -55,7 +55,7 @@ Pokrenite aplikaciju koristeći zadatu komandu ili izvršnu datoteku.
 
 Ekran za Prijavu:
 
-Unesite vaše korisničko ime i lozinku.
+Unesite vaše korisničko ime i lozinku. (admin;admin123 / user1;password1 / user2/password2)
 Kliknite na dugme "Prijava".
 Ako su kredencijali ispravni, bićete preusmereni na komandnu tablu.
 Komandna Tabla
