@@ -27,24 +27,25 @@ import java.sql.SQLException;
 public class ManageHotelsController {
 
     @FXML
-    TextField nameField;
+    public TextField nameField;
     @FXML
-    TextField addressField;
+    public TextField addressField;
     @FXML
-    TextField ratingField;
+    public TextField ratingField;
+    public TableView<Object> tableView;
     @FXML
     private TableView<Hotel> hotelsTable;
     @FXML
-    private TableColumn<Hotel, Integer> idColumn;
+    public TableColumn<Hotel, Integer> idColumn;
     @FXML
-    private TableColumn<Hotel, String> nameColumn;
+    public TableColumn<Hotel, String> nameColumn;
     @FXML
-    private TableColumn<Hotel, String> addressColumn;
+    public TableColumn<Hotel, String> addressColumn;
     @FXML
-    private TableColumn<Hotel, Float> ratingColumn;
+    public TableColumn<Hotel, Float> ratingColumn;
 
-    ObservableList<Hotel> hotelList = FXCollections.observableArrayList();
-    HotelDAO hotelDAO = new HotelDAO();
+    public ObservableList<Hotel> hotelList = FXCollections.observableArrayList();
+    public HotelDAO hotelDAO = new HotelDAO();
 
     /**
      * Inicijalizacija kontrolera.
@@ -71,7 +72,7 @@ public class ManageHotelsController {
      * Proverava ispravnost unosa i dodaje novi hotel u bazu podataka.
      */
     @FXML
-    void handleAddHotel() {
+    public void handleAddHotel() {
         String name = nameField.getText();
         String address = addressField.getText();
         float rating;
